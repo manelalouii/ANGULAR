@@ -1,0 +1,73 @@
+<div class="suggestions-container">
+  <!-- Barre de recherche -->
+  <div class="search-section">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      placeholder="Rechercher par titre ou catégorie..."
+      class="search-input">
+    <span class="search-icon">🔍</span>
+  </div>
+
+  <!-- Compteur de résultats -->
+  <div class="results-info">
+    <p>{{ filteredSuggestions.length }} suggestion(s) trouvée(s)</p>
+  </div>
+
+  <!-- Liste des suggestions -->
+  <div class="suggestions-grid">
+    <div
+      *ngFor="let suggestion of filteredSuggestions"
+      class="suggestion-card">
+
+      <!-- En-tête de la carte -->
+      <div class="card-header">
+        <h3 class="suggestion-title">{{ suggestion.title }}</h3>
+        <span [class]="getStatusClass(suggestion.status)" class="status-badge">
+          {{ formatStatus(suggestion.status) }}
+        </span>
+      </div>
+
+      <!-- Corps de la carte -->
+      <div class="card-body">
+        <p class="suggestion-description">{{ suggestion.description }}</p>
+
+        <div class="suggestion-meta">
+          <span class="category-tag">📁 {{ suggestion.category }}</span>
+          <span class="date-tag">📅 {{ suggestion.date | date:'dd/MM/yyyy' }}</span>
+        </div>
+
+        <div class="likes-section">
+          <span class="likes-count">❤️ {{ suggestion.nbLikes }} likes</span>
+        </div>
+      </div>
+
+      <!-- Pied de la carte avec boutons -->
+      <div class="card-footer" *ngIf="suggestion.status !== 'refusee'">
+        <button
+          (click)="incrementLikes(suggestion)"
+          class="btn btn-like">
+          👍 Like
+        </button>
+
+        <button
+          (click)="addToFavorites(suggestion)"
+          class="btn btn-favorite">
+          ⭐ Ajouter aux favoris
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section favoris -->
+  <div class="favorites-section" *ngIf="favorites.length > 0">
+    <h2 class="favorites-title">⭐ Mes Favoris ({{ favorites.length }})</h2>
+    <div class="favorites-list">
+      <div *ngFor="let fav of favorites" class="favorite-item">
+        <span class="favorite-title">{{ fav.title }}</span>
+        <span class="favorite-category">{{ fav.category }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+ 
